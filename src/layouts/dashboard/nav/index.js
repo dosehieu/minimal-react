@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Link, Button, Drawer, Typography, Avatar, Stack, IconButton } from '@mui/material';
 // mock
 import account from '../../../_mock/account';
 // hooks
@@ -12,12 +12,14 @@ import useResponsive from '../../../hooks/useResponsive';
 import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
+import Iconify from '../../../components/iconify';
 //
 import navConfig from './config';
 
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
+const ICON_NAV_WIDTH = 75;
 
 const StyledAccount = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -32,85 +34,107 @@ const StyledAccount = styled('div')(({ theme }) => ({
 Nav.propTypes = {
   openNav: PropTypes.bool,
   onCloseNav: PropTypes.func,
+  onOpenNav: PropTypes.func,
 };
 
-export default function Nav({ openNav, onCloseNav }) {
+export default function Nav({ openNav, onCloseNav, onOpenNav }) {
   const { pathname } = useLocation();
+  const [hoverNav, setHoverNav] = useState(null);
 
   const isDesktop = useResponsive('up', 'lg');
-
-  useEffect(() => {
+  console.log('load');
+  console.log(openNav);
+  console.log('load');
+  const openNavHandler = () => {
     if (openNav) {
+      console.log('onCloseNav');
       onCloseNav();
+      console.log(openNav);
+    } else {
+      console.log('onOpenNav');
+      onOpenNav();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  };
+
+  useEffect(() => {}, [pathname]);
 
   const renderContent = (
-    <Scrollbar
-      sx={{
-        height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-      }}
-    >
-      <Box sx={{ px: 2.5, py: 3, display: 'inline-flex' }}>
+    <>
+      <Box sx={{ px: 2.5, py: 3, display: 'flex', justifyContent: 'space-between' }}>
         <Logo />
+        <IconButton
+          color={openNav ? 'primary' : 'default'}
+          sx={{ width: 40, height: 40, transition: '200ms', ...(openNav && { transform: 'rotate(180deg)' }) }}
+          onClick={openNavHandler}
+        >
+          <Iconify icon="ic:round-keyboard-double-arrow-left" width={32} />
+        </IconButton>
       </Box>
+      <Scrollbar
+        sx={{
+          height: 1,
+          '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
+        }}
+      >
+        <Box sx={{ mb: 5, mx: 2.5 }}>
+          <Link underline="none">
+            <StyledAccount>
+              <Avatar src={account.photoURL} alt="photoURL" />
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none">
-          <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+              <Box sx={{ ml: 2 }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+                  {account.displayName}
+                </Typography>
 
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  {account.role}
+                </Typography>
+              </Box>
+            </StyledAccount>
+          </Link>
+        </Box>
+
+        <NavSection data={navConfig} />
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
+          <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
+            <Box
+              component="img"
+              src="/assets/illustrations/illustration_avatar.png"
+              sx={{ width: 100, position: 'absolute', top: -50 }}
+            />
+
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography gutterBottom variant="h6">
+                Get more?
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                From only $69
               </Typography>
             </Box>
-          </StyledAccount>
-        </Link>
-      </Box>
 
-      <NavSection data={navConfig} />
-
-      <Box sx={{ flexGrow: 1 }} />
-
-      <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
-        <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
-          <Box
-            component="img"
-            src="/assets/illustrations/illustration_avatar.png"
-            sx={{ width: 100, position: 'absolute', top: -50 }}
-          />
-
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography gutterBottom variant="h6">
-              Get more?
-            </Typography>
-
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              From only $69
-            </Typography>
-          </Box>
-
-          <Button href="https://material-ui.com/store/items/minimal-dashboard/" target="_blank" variant="contained">
-            Upgrade to Pro
-          </Button>
-        </Stack>
-      </Box>
-    </Scrollbar>
+            <Button href="https://material-ui.com/store/items/minimal-dashboard/" target="_blank" variant="contained">
+              Upgrade to Pro
+            </Button>
+          </Stack>
+        </Box>
+      </Scrollbar>
+    </>
   );
 
   return (
     <Box
       component="nav"
+      onMouseEnter={() => setHoverNav(true)}
+      onMouseLeave={() => setHoverNav(false)}
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH },
+        transition: '200ms',
+        ...(!openNav && !hoverNav && { width: { lg: ICON_NAV_WIDTH }})
       }}
     >
       {isDesktop ? (
@@ -122,6 +146,8 @@ export default function Nav({ openNav, onCloseNav }) {
               width: NAV_WIDTH,
               bgcolor: 'background.default',
               borderRightStyle: 'dashed',
+              transition: '200ms',
+              ...(!openNav && !hoverNav && { width: { lg: ICON_NAV_WIDTH }})
             },
           }}
         >

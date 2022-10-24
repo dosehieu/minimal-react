@@ -54,7 +54,7 @@ export default function Header({ onOpenNav }) {
             display: { lg: 'none' },
           }}
         >
-          <Iconify icon="eva:menu-2-fill" />
+          <Iconify icon="eva:menu-2-fill"/>
         </IconButton>
 
         <Searchbar />
