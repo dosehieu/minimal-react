@@ -25,6 +25,7 @@ import { fToNow } from '../../../utils/formatTime';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
+import HoverScaler from '../../../components/hover-scaler';
 
 // ----------------------------------------------------------------------
 
@@ -102,11 +103,13 @@ export default function NotificationsPopover() {
 
   return (
     <>
-      <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
-        <Badge badgeContent={totalUnRead} color="error">
-          <Iconify icon="eva:bell-fill" />
-        </Badge>
-      </IconButton>
+      <HoverScaler>
+        <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
+          <Badge badgeContent={totalUnRead} color="error">
+            <Iconify icon="eva:bell-fill" />
+          </Badge>
+        </IconButton>
+      </HoverScaler>
 
       <Popover
         open={Boolean(open)}

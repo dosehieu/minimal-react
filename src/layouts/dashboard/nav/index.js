@@ -13,6 +13,7 @@ import Logo from '../../../components/logo';
 import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 import Iconify from '../../../components/iconify';
+import HoverScaler from '../../../components/hover-scaler';
 //
 import navConfig from './config';
 
@@ -33,27 +34,16 @@ const StyledAccount = styled('div')(({ theme }) => ({
 
 Nav.propTypes = {
   openNav: PropTypes.bool,
-  onCloseNav: PropTypes.func,
   onOpenNav: PropTypes.func,
 };
 
-export default function Nav({ openNav, onCloseNav, onOpenNav }) {
+export default function Nav({ openNav, onOpenNav }) {
   const { pathname } = useLocation();
   const [hoverNav, setHoverNav] = useState(null);
 
   const isDesktop = useResponsive('up', 'lg');
-  console.log('load');
-  console.log(openNav);
-  console.log('load');
   const openNavHandler = () => {
-    if (openNav) {
-      console.log('onCloseNav');
-      onCloseNav();
-      console.log(openNav);
-    } else {
-      console.log('onOpenNav');
-      onOpenNav();
-    }
+    onOpenNav(!openNav);
   };
 
   useEffect(() => {}, [pathname]);
@@ -62,13 +52,15 @@ export default function Nav({ openNav, onCloseNav, onOpenNav }) {
     <>
       <Box sx={{ px: 2.5, py: 3, display: 'flex', justifyContent: 'space-between' }}>
         <Logo />
-        <IconButton
-          color={openNav ? 'primary' : 'default'}
-          sx={{ width: 40, height: 40, transition: '200ms', ...(openNav && { transform: 'rotate(180deg)' }) }}
-          onClick={openNavHandler}
-        >
-          <Iconify icon="ic:round-keyboard-double-arrow-left" width={32} />
-        </IconButton>
+        <HoverScaler>
+          <IconButton
+            color={openNav ? 'primary' : 'default'}
+            sx={{ width: 40, height: 40, transition: '200ms', ...(openNav && { transform: 'rotate(180deg)' }) }}
+            onClick={openNavHandler}
+          >
+            <Iconify icon="ic:round-keyboard-double-arrow-left" width={32} />
+          </IconButton>
+        </HoverScaler>
       </Box>
       <Scrollbar
         sx={{
@@ -134,7 +126,7 @@ export default function Nav({ openNav, onCloseNav, onOpenNav }) {
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH },
         transition: '200ms',
-        ...(!openNav && !hoverNav && { width: { lg: ICON_NAV_WIDTH }})
+        ...(!openNav && { width: { lg: ICON_NAV_WIDTH } }),
       }}
     >
       {isDesktop ? (
@@ -147,7 +139,7 @@ export default function Nav({ openNav, onCloseNav, onOpenNav }) {
               bgcolor: 'background.default',
               borderRightStyle: 'dashed',
               transition: '200ms',
-              ...(!openNav && !hoverNav && { width: { lg: ICON_NAV_WIDTH }})
+              ...(!openNav && !hoverNav && { width: { lg: ICON_NAV_WIDTH } }),
             },
           }}
         >
@@ -156,7 +148,7 @@ export default function Nav({ openNav, onCloseNav, onOpenNav }) {
       ) : (
         <Drawer
           open={openNav}
-          onClose={onCloseNav}
+          onClose={() => onOpenNav(false)}
           ModalProps={{
             keepMounted: true,
           }}

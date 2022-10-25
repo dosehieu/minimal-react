@@ -29,7 +29,7 @@ export default function DashboardAppPage() {
         <title> Dashboard | Minimal UI </title>
       </Helmet>
 
-      <Container maxWidth="xl">
+      <Container maxWidth="100%">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
         </Typography>

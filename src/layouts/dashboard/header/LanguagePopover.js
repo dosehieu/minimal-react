@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import { Box, MenuItem, Stack, IconButton, Popover } from '@mui/material';
 
+import HoverScaler from '../../../components/hover-scaler'
+
 // ----------------------------------------------------------------------
 
 const LANGS = [
@@ -38,20 +40,21 @@ export default function LanguagePopover() {
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          padding: 0,
-          width: 44,
-          height: 44,
-          ...(open && {
-            bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity),
-          }),
-        }}
-      >
-        <img src={LANGS[0].icon} alt={LANGS[0].label} />
-      </IconButton>
-
+      <HoverScaler>
+        <IconButton
+          onClick={handleOpen}
+          sx={{
+            padding: 0,
+            width: 44,
+            height: 44,
+            ...(open && {
+              bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.focusOpacity),
+            }),
+          }}
+        >
+          <img src={LANGS[0].icon} alt={LANGS[0].label} />
+        </IconButton>
+      </HoverScaler>
       <Popover
         open={Boolean(open)}
         anchorEl={open}

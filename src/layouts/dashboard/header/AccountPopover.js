@@ -5,6 +5,8 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover 
 // mocks_
 import account from '../../../_mock/account';
 
+import HoverScaler from '../../../components/hover-scaler';
+
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -37,25 +39,27 @@ export default function AccountPopover() {
 
   return (
     <>
-      <IconButton
-        onClick={handleOpen}
-        sx={{
-          p: 0,
-          ...(open && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
-        }}
-      >
-        <Avatar src={account.photoURL} alt="photoURL" />
-      </IconButton>
+      <HoverScaler>
+        <IconButton
+          onClick={handleOpen}
+          sx={{
+            p: 0,
+            ...(open && {
+              '&:before': {
+                zIndex: 1,
+                content: "''",
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                position: 'absolute',
+                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
+              },
+            }),
+          }}
+        >
+          <Avatar src={account.photoURL} alt="photoURL" />
+        </IconButton>
+      </HoverScaler>
 
       <Popover
         open={Boolean(open)}

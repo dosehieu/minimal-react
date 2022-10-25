@@ -6,6 +6,7 @@ import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } f
 import { bgBlur } from '../../../utils/cssStyles';
 // component
 import Iconify from '../../../components/iconify';
+import HoverScaler from '../../../components/hover-scaler';
 
 // ----------------------------------------------------------------------
 
@@ -47,9 +48,11 @@ export default function Searchbar() {
     <ClickAwayListener onClickAway={handleClose}>
       <div>
         {!open && (
-          <IconButton onClick={handleOpen}>
-            <Iconify icon="eva:search-fill" />
-          </IconButton>
+          <HoverScaler>
+            <IconButton onClick={handleOpen}>
+              <Iconify icon="eva:search-fill" />
+            </IconButton>
+          </HoverScaler>
         )}
 
         <Slide direction="down" in={open} mountOnEnter unmountOnExit>
